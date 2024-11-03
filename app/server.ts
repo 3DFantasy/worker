@@ -1,8 +1,7 @@
-import express from 'express'
 import 'dotenv/config'
-
+import express from 'express'
 import rootHtml from './html/root'
-import { nodeResque } from './utils/node-resque'
+import { nodeResque } from './utils'
 
 const app = express()
 
