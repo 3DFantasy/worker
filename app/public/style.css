@@ -1,0 +1,39 @@
+body {
+	margin: auto;
+	width: 100vw;
+	height: 100vh;
+	background-color: #333333;
+	color: beige;
+}
+
+/* colors: {
+  background: '#333333',
+  primary: {
+    DEFAULT: '#4ac694',
+    foregound: '#000000',
+  },
+}, */
+
+.main {
+	width: 100px;
+	padding: 100px 0px 0px 0px;
+	margin: auto;
+}
+
+p {
+	text-align: center;
+	margin: 2px 0px 0px 0px;
+}
+
+.rotate {
+	animation: rotation 10s infinite linear;
+}
+
+@keyframes rotation {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(359deg);
+	}
+}
