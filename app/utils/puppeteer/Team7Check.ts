@@ -1,10 +1,10 @@
 import puppeteer from 'puppeteer'
 
-export async function Team9Check() {
+export async function Team7Check() {
 	const browser = await puppeteer.launch()
 	const page = await browser.newPage()
 
-	await page.goto(process.env.TEAM_9_URL)
+	await page.goto(process.env.TEAM_7_URL)
 
 	await page.setViewport({ width: 1080, height: 1024 })
 
@@ -19,21 +19,24 @@ export async function Team9Check() {
 
 		// Loop through each <tbody> and collect hrefs
 		tbodies.forEach((tbody) => {
-			tbody.querySelectorAll('td').forEach((td, index, tds) => {
-				const link = td.querySelector('a')
-				if (link && link.href) {
-					// Check for three preceding <td> elements
-					if (index >= 3) {
-						const precedingText = [
-							tds[index - 3].innerText,
-							tds[index - 2].innerText,
-							tds[index - 1].innerText,
-						].join(', ')
+			// Loop through each row in the <tbody>
+			tbody.querySelectorAll('tr').forEach((row) => {
+				const cells = row.querySelectorAll('td')
 
-						// Push the combined string and href as an object
+				// Ensure there are at least four columns in the row
+				if (cells.length >= 4) {
+					// Get the text from the first column
+					const text = cells[0].innerText
+
+					// Get the href from the fourth column
+					const link = cells[3].querySelector('a')
+					const href = link ? link.href : null
+
+					// Add the result to the array only if a valid href is found
+					if (href) {
 						resultArray.push({
-							text: precedingText,
-							href: link.href,
+							text: text,
+							href: href,
 						})
 					}
 				}
@@ -43,6 +46,10 @@ export async function Team9Check() {
 	})
 
 	console.log('Extracted result:', result)
+
+	// compare w db
+
+	// if new entry record to db & trigger email
 
 	await browser.close()
 	return true

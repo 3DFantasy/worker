@@ -1,10 +1,10 @@
 import puppeteer from 'puppeteer'
 
-export async function Team9Check() {
+export async function Team8Check() {
 	const browser = await puppeteer.launch()
 	const page = await browser.newPage()
 
-	await page.goto(process.env.TEAM_9_URL)
+	await page.goto(process.env.TEAM_8_URL)
 
 	await page.setViewport({ width: 1080, height: 1024 })
 
@@ -43,6 +43,10 @@ export async function Team9Check() {
 	})
 
 	console.log('Extracted result:', result)
+
+	// compare w db
+
+	// if new entry record to db & trigger email
 
 	await browser.close()
 	return true
