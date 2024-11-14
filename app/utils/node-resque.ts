@@ -1,7 +1,8 @@
 import { Scheduler, Queue, Worker } from 'node-resque'
 import * as schedule from 'node-schedule'
-import { sendSlackMessage } from './slack'
-import { createSignature } from './createSignature'
+import { Team9Check } from '.'
+
+// import { createSignature } from './createSignature'
 
 export async function nodeResque() {
 	// ////////////////////////
@@ -17,8 +18,6 @@ export async function nodeResque() {
 		database: 0,
 	}
 
-	const queues = process.env.REDIS_QUEUE ? process.env.REDIS_QUEUE : 'default'
-
 	// ////////////////////////
 	// JOBS                  //
 	// ////////////////////////
@@ -26,11 +25,8 @@ export async function nodeResque() {
 	let jobsToComplete = 0
 
 	const jobs: any = {
-		ticktock: (time: string, callback: any) => {
-			const text = `*** THE TIME IS ${time} ***`
-			sendSlackMessage(text, 'ticktock')
-			console.log(text)
-			return true
+		checkAll: async (time: string, callback: any) => {
+			await Team9Check()
 		},
 		// webhookUsage: async (env: string, callback: any) => {
 		// 	// const endpoint = 'webhooks/usage'
@@ -61,7 +57,7 @@ export async function nodeResque() {
 	// START A WORKER //
 	// /////////////////
 
-	const worker = new Worker({ connection: connectionDetails, queues: [queues] }, jobs)
+	const worker = new Worker({ connection: connectionDetails, queues: [process.env.REDIS_QUEUE] }, jobs)
 	await worker.connect()
 	worker.start()
 
@@ -139,21 +135,19 @@ export async function nodeResque() {
 	})
 	await queue.connect()
 
-	const midnight = new schedule.RecurrenceRule()
-	midnight.hour = 0
-	midnight.minute = 1
-	midnight.tz = 'Canada/Eastern'
+	// const midnight = new schedule.RecurrenceRule()
+	// midnight.hour = 0
+	// midnight.minute = 1
+	// midnight.tz = 'Canada/Eastern'
 
-	// const test = new schedule.RecurrenceRule()
-	// test.hour = 20
-	// test.minute = 42
-	// test.tz = 'Canada/Eastern'
+	const test = new schedule.RecurrenceRule()
+	test.hour = 23
+	test.minute = 33
+	test.tz = 'Canada/Eastern'
 
-	schedule.scheduleJob(midnight, async () => {
-		if (scheduler.leader && process.env.ONEREVIEW_WEBHOOK_USAGE) {
-			console.log('>>> enquing a job')
-			await queue.enqueue('onereview', 'webhookUsage', [process.env.ONEREVIEW_WEBHOOK_USAGE])
-		}
+	schedule.scheduleJob(test, async () => {
+		console.log('>>> enquing a job')
+		await queue.enqueue(process.env.REDIS_QUEUE, 'test')
 	})
 
 	// ////////////////////

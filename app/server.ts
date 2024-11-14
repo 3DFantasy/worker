@@ -1,8 +1,18 @@
-import express from 'express'
 import 'dotenv/config'
-
+import express from 'express'
 import rootHtml from './html/root'
-import { nodeResque } from './utils/node-resque'
+// import {
+// 	nodeResque,
+// 	Team1Check,
+// 	Team2Check,
+// 	Team3Check,
+// 	Team4Check,
+// 	Team5Check,
+// 	Team6Check,
+// 	Team7Check,
+// 	Team8Check,
+// 	Team9Check,
+// } from './utils'
 
 const app = express()
 
@@ -16,7 +26,9 @@ app.get('/', (req: Request, res: any) => {
 // Use routes
 // app.use('/home', homeRoute)
 
-nodeResque()
+// nodeResque()
+
+// Team9Check()
 
 // Example specifying the port and starting the server
 const port = process.env.PORT || 3000 // You can use environment variables for port configuration
