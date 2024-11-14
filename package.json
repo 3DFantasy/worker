@@ -32,7 +32,8 @@
 		"node-resque": "^9.3.3",
 		"node-schedule": "^2.1.1",
 		"prisma": "^5.22.0",
-		"puppeteer": "^23.6.1"
+		"puppeteer": "^23.6.1",
+		"true-myth": "^8.0.1"
 	},
 	"devDependencies": {
 		"@flydotio/dockerfile": "^0.5.7",
