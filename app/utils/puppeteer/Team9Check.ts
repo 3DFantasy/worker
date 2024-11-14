@@ -1,4 +1,7 @@
 import puppeteer from 'puppeteer'
+import { checkAndUpdateDepthChart } from '../db'
+
+import type { DepthChartObject } from '../../types'
 
 export async function Team9Check() {
 	const browser = await puppeteer.launch()
@@ -15,7 +18,7 @@ export async function Team9Check() {
 		if (!tbodies.length) return []
 
 		// Initialize an array to store all hrefs
-		const resultArray: { text: string; href: string }[] = []
+		const resultArray: DepthChartObject[] = []
 
 		// Loop through each <tbody> and collect hrefs
 		tbodies.forEach((tbody) => {
@@ -32,7 +35,7 @@ export async function Team9Check() {
 
 						// Push the combined string and href as an object
 						resultArray.push({
-							text: precedingText,
+							title: precedingText,
 							href: link.href,
 						})
 					}
@@ -42,7 +45,20 @@ export async function Team9Check() {
 		return resultArray
 	})
 
-	console.log('Extracted result:', result)
+	// compare w db
+	const updateDepthChartResp = await checkAndUpdateDepthChart({
+		depthChart: result,
+		teamId: 9,
+		year: 2024,
+	})
+
+	if (updateDepthChartResp.isErr) {
+		return updateDepthChartResp.error
+	}
+
+	if (updateDepthChartResp.value.code === 200) {
+		// trigger email
+	}
 
 	await browser.close()
 	return true
